@@ -1,0 +1,30 @@
+name: Generate plots
+
+# Runs the Python version of the model and commits the five result plots to plots/.
+on:
+  push:
+    paths:
+      - frisbee_simulation.py
+      - .github/workflows/plots.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  plots:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install -r requirements.txt
+      - run: python frisbee_simulation.py
+      - name: Commit plots
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add plots/*.png
+          git diff --cached --quiet || git commit -m "Regenerate result plots"
+          git push
