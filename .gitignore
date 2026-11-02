@@ -1,0 +1,6 @@
+# MATLAB / Simulink build artefacts
+slprj/
+*.slxc
+*.asv
+*.autosave
+__pycache__/
